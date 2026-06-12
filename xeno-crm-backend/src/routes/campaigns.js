@@ -81,12 +81,14 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const { rows } = await pool.query(`
-      SELECT c.*, s.name AS segment_name,
-        count(l.id) FILTER (WHERE l.status = 'sent')      AS sent_count,
-        count(l.id) FILTER (WHERE l.status = 'delivered') AS delivered_count,
-        count(l.id) FILTER (WHERE l.status = 'failed')    AS failed_count,
-        count(l.id) FILTER (WHERE l.status = 'opened')    AS opened_count,
-        count(l.id) FILTER (WHERE l.status = 'clicked')   AS clicked_count
+      SELECT
+        c.*,
+        s.name AS segment_name,
+        count(l.id) AS total_count,
+        count(l.id) FILTER (WHERE l.status IN ('delivered','opened','clicked')) AS delivered_count,
+        count(l.id) FILTER (WHERE l.status = 'failed')                          AS failed_count,
+        count(l.id) FILTER (WHERE l.status IN ('opened','clicked'))             AS opened_count,
+        count(l.id) FILTER (WHERE l.status = 'clicked')                         AS clicked_count
       FROM campaigns c
       LEFT JOIN communication_logs l ON l.campaign_id = c.id
       LEFT JOIN segments s ON s.id = c.segment_id

@@ -1,0 +1,1 @@
+{"name": "High Spenders", "rules": {"operator":"AND","conditions":[{"field":"total_spend","op":">","value":5000}]}}

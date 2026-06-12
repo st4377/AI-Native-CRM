@@ -1,35 +1,36 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-const API_KEY = process.env.GEMINI_API_KEY;
-const MODEL = 'gemini-2.0-flash';
-const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
+const API_KEY = process.env.GROQ_API_KEY;
+const MODEL = 'llama-3.3-70b-versatile';
+const ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions';
 
-async function callGemini(prompt) {
+async function callLLM(prompt) {
   const res = await fetch(ENDPOINT, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-goog-api-key': API_KEY,
+      'Authorization': `Bearer ${API_KEY}`,
     },
     body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
+      model: MODEL,
+      messages: [{ role: 'user', content: prompt }],
     }),
   });
 
   const data = await res.json();
   if (!res.ok) {
-    throw new Error(`Gemini API error: ${JSON.stringify(data)}`);
+    throw new Error(`LLM API error: ${JSON.stringify(data)}`);
   }
-  return data.candidates[0].content.parts[0].text;
+  return data.choices[0].message.content;
 }
 
 export async function generateJSON(prompt) {
-  const text = await callGemini(prompt);
+  const text = await callLLM(prompt);
   const clean = text.replace(/```json|```/g, '').trim();
   return JSON.parse(clean);
 }
 
 export async function generateText(prompt) {
-  return callGemini(prompt);
+  return callLLM(prompt);
 }
