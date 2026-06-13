@@ -126,37 +126,35 @@ export default function CampaignsPage() {
         </div>
       )}
 
-      <div className="card">
-        <h3>Past campaigns</h3>
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>ID</th><th>Segment</th><th>Channel</th><th>Audience</th>
-              <th>Delivered</th><th>Failed</th><th>Opened</th><th>Clicked</th><th>AI Summary</th>
-            </tr>
-          </thead>
-          <tbody>
-            {campaigns.map((c) => (
-              <tr key={c.id}>
-                <td>{c.id}</td>
-                <td>{c.segment_name}</td>
-                <td>{c.channel}</td>
-                <td>{c.audience_size}</td>
-                <td>{c.delivered_count}</td>
-                <td>{c.failed_count}</td>
-                <td>{c.opened_count}</td>
-                <td>{c.clicked_count}</td>
-                <td style={{ maxWidth: 300 }}>
-                  {summaries[c.id]
-                    ? <span style={{ fontSize: 13 }}>{summaries[c.id]}</span>
-                    : <button className="btn secondary" onClick={() => loadSummary(c.id)} disabled={loadingSummary === c.id}>
-                        {loadingSummary === c.id ? 'Thinking...' : 'Get AI Summary'}
-                      </button>}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div>
+        <h3 style={{ marginBottom: 12 }}>Past Campaigns</h3>
+        {campaigns.map((c) => {
+          const icon = { email: '📧', sms: '💬', whatsapp: '🟢', rcs: '📱' }[c.channel] || '✉️';
+          return (
+            <div key={c.id} className="card">
+              <div className="flex justify-between items-start mb-2">
+                <div>
+                  <span className="text-lg mr-2">{icon}</span>
+                  <span className="font-semibold">{c.segment_name}</span>
+                  <span className="ml-2 text-xs px-2 py-1 rounded-full" style={{ background: '#dcfce7', color: '#166534' }}>{c.status}</span>
+                </div>
+                <span className="text-xs text-slate-400">{c.channel.toUpperCase()}</span>
+              </div>
+              <p style={{ color: '#64748b', fontSize: 14, marginBottom: 12 }}>{c.message}</p>
+              <div className="grid grid-cols-4 gap-4 mb-3">
+                <div><p className="text-xl font-bold">{c.total_count}</p><p style={{ fontSize: 12, color: '#94a3b8' }}>Sent</p></div>
+                <div><p className="text-xl font-bold text-emerald-600">{c.delivered_count}</p><p style={{ fontSize: 12, color: '#94a3b8' }}>Delivered</p></div>
+                <div><p className="text-xl font-bold text-indigo-600">{c.opened_count}</p><p style={{ fontSize: 12, color: '#94a3b8' }}>Opened</p></div>
+                <div><p className="text-xl font-bold text-orange-600">{c.clicked_count}</p><p style={{ fontSize: 12, color: '#94a3b8' }}>Clicked</p></div>
+              </div>
+              {summaries[c.id]
+                ? <p style={{ fontSize: 13, color: '#475569', background: '#eef2ff', padding: 10, borderRadius: 8 }}>{summaries[c.id]}</p>
+                : <button className="btn secondary" onClick={() => loadSummary(c.id)} disabled={loadingSummary === c.id}>
+                    {loadingSummary === c.id ? 'Thinking...' : '✨ Get AI Summary'}
+                  </button>}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
