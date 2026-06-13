@@ -25,7 +25,7 @@ export default function Sidebar({ tab, setTab }) {
         ))}
       </nav>
       <div className="hidden md:block mt-auto text-xs text-slate-500 pt-4">
-        Built for Xeno SDE Internship Assignment
+        
       </div>
     </aside>
   );
