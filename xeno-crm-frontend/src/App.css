@@ -1,5 +1,7 @@
 * { box-sizing: border-box; }
-body { margin: 0; background: #f8fafc; color: #1e293b; font-family: -apple-system, sans-serif; }
+body { margin: 0; background: #f4f5f9; color: #1e1b2e; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
+h1 { font-weight: 800; letter-spacing: -0.02em; }
+h3 { font-weight: 700; letter-spacing: -0.01em; }
 
 .data-table { width: 100%; border-collapse: collapse; margin-top: 12px; background: #fff; }
 .data-table th, .data-table td { border: 1px solid #e2e8f0; padding: 8px 12px; text-align: left; font-size: 14px; }
