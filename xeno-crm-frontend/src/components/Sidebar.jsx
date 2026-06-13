@@ -1,9 +1,9 @@
 export default function Sidebar({ tab, setTab }) {
   const items = [
-    { id: 'dashboard', label: 'Dashboard', icon:  },
-    { id: 'customers', label: 'Customers', icon:  },
-    { id: 'segments', label: 'Segments', icon:  },
-    { id: 'campaigns', label: 'Campaigns', icon:  },
+    { id: 'dashboard', label: 'Dashboard'  },
+    { id: 'customers', label: 'Customers'  },
+    { id: 'segments', label: 'Segments'  },
+    { id: 'campaigns', label: 'Campaigns'  },
   ];
   return (
     <aside className="w-full md:w-60 bg-[#16151f] text-slate-200 flex flex-row md:flex-col items-center md:items-stretch p-2 md:p-4 md:min-h-screen overflow-x-auto">
