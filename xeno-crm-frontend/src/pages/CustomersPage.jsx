@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react';
-import { apiGet } from '../api';
+import { apiGet, apiPost } from '../api';
 
 export default function CustomersPage() {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState({ name: '', email: '', phone: '', orderAmount: '', orderItems: '' });
+  const [saving, setSaving] = useState(false);
+  const [formError, setFormError] = useState(null);
 
   useEffect(() => {
     apiGet('/api/customers')
@@ -12,6 +16,31 @@ export default function CustomersPage() {
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
   }, []);
+
+  const submitCustomer = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    setFormError(null);
+    try {
+      const payload = {
+        name: form.name,
+        email: form.email,
+        phone: form.phone || null,
+      };
+      if (form.orderAmount) {
+        payload.order = { amount: Number(form.orderAmount), items: form.orderItems };
+      }
+      await apiPost('/api/customers', payload);
+      setForm({ name: '', email: '', phone: '', orderAmount: '', orderItems: '' });
+      setShowForm(false);
+      const updated = await apiGet('/api/customers');
+      setCustomers(updated);
+    } catch (err) {
+      setFormError(err.message);
+    } finally {
+      setSaving(false);
+    }
+  };
 
   if (loading) return <p>Loading customers...</p>;
   if (error) return <p style={{ color: 'red' }}>Error: {error}</p>;
@@ -23,8 +52,46 @@ export default function CustomersPage() {
 
   return (
     <div>
-      <h1>Customers</h1>
+      <div className="flex justify-between items-center">
+  <h1>Customers</h1>
+  <button className="btn" onClick={() => setShowForm((v) => !v)}>
+    {showForm ? 'Cancel' : '+ Add Customer'}
+  </button>
+</div>
       <p style={{ color: '#64748b', marginBottom: 20 }}>Your shopper database</p>
+      {showForm && (
+  <div className="card">
+    <h3>New Customer</h3>
+    {formError && <p style={{ color: 'salmon' }}>Error: {formError}</p>}
+    <form onSubmit={submitCustomer}>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="field">
+          <label>Name</label>
+          <input style={{ width: '100%' }} required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+        </div>
+        <div className="field">
+          <label>Email</label>
+          <input style={{ width: '100%' }} type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+        </div>
+        <div className="field">
+          <label>Phone (optional)</label>
+          <input style={{ width: '100%' }} value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+        </div>
+        <div className="field">
+          <label>First order amount ₹ (optional)</label>
+          <input style={{ width: '100%' }} type="number" value={form.orderAmount} onChange={(e) => setForm({ ...form, orderAmount: e.target.value })} />
+        </div>
+        <div className="field" style={{ gridColumn: 'span 2' }}>
+          <label>Order items (optional)</label>
+          <input style={{ width: '100%' }} value={form.orderItems} onChange={(e) => setForm({ ...form, orderItems: e.target.value })} placeholder="e.g. Cotton T-Shirt, Sneakers" />
+        </div>
+      </div>
+      <button className="btn" type="submit" disabled={saving}>
+        {saving ? 'Saving...' : 'Save Customer'}
+      </button>
+    </form>
+  </div>
+)}
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
         <div className="card">
