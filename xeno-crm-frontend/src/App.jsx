@@ -10,9 +10,9 @@ export default function App() {
   const [tab, setTab] = useState('dashboard');
 
   return (
-    <div className="flex min-h-screen bg-slate-100 text-slate-900">
+    <div className="flex flex-col md:flex-row min-h-screen bg-slate-100 text-slate-900">
       <Sidebar tab={tab} setTab={setTab} />
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-4 md:p-8 overflow-x-hidden">
         {tab === 'dashboard' && <DashboardPage />}
         {tab === 'customers' && <CustomersPage />}
         {tab === 'segments' && <SegmentsPage />}
