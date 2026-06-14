@@ -1,6 +1,21 @@
 import { useEffect, useState } from 'react';
 import { apiGet, apiPost } from '../api';
 
+const FIELD_LABELS = {
+  total_spend: 'Spend',
+  order_count: 'Orders',
+  days_since_last_order: 'Inactive days',
+};
+
+function formatRules(rules) {
+  if (!rules?.conditions?.length) return [];
+  return rules.conditions.map((c) => {
+    const label = FIELD_LABELS[c.field] || c.field;
+    const value = c.field === 'total_spend' ? `₹${c.value}` : c.value;
+    return `${label} ${c.op} ${value}`;
+  });
+}
+
 export default function SegmentsPage() {
   const [description, setDescription] = useState('');
   const [rulesJson, setRulesJson] = useState('');
@@ -48,7 +63,7 @@ export default function SegmentsPage() {
     setError(null);
     try {
       const rules = JSON.parse(rulesJson);
-      await apiPost('/api/segments', { name, rules });
+      await apiPost('/api/segments', { name, rules, description: description || null });
       setName('');
       loadSegments();
     } catch (e) {
@@ -129,17 +144,27 @@ export default function SegmentsPage() {
       <div className="card">
         <h3>Saved segments</h3>
         <table className="data-table">
-          <thead><tr><th>ID</th><th>Name</th><th>Current size</th><th>Rules</th></tr></thead>
-          <tbody>
-            {segments.map((s) => (
-              <tr key={s.id}>
-                <td>{s.id}</td>
-                <td>{s.name}</td>
-                <td>{s.current_count}</td>
-                <td><code style={{ fontSize: 12 }}>{JSON.stringify(s.rules)}</code></td>
-              </tr>
-            ))}
-          </tbody>
+           <thead><tr><th>ID</th><th>Name</th><th>Current size</th><th>Description & Rules</th></tr></thead>
+<tbody>
+  {segments.map((s) => (
+    <tr key={s.id}>
+      <td>{s.id}</td>
+      <td>{s.name}</td>
+      <td>{s.current_count}</td>
+      <td>
+        {s.description && <p style={{ marginBottom: 6, fontSize: 14 }}>{s.description}</p>}
+        {formatRules(s.rules).map((r, i) => (
+          <span key={i} style={{
+            display: 'inline-block', background: '#eef2ff', color: '#4338ca',
+            fontSize: 12, padding: '3px 10px', borderRadius: 12, marginRight: 6, marginBottom: 4,
+          }}>
+            {r}
+          </span>
+        ))}
+      </td>
+    </tr>
+  ))}
+</tbody>
         </table>
       </div>
     </div>

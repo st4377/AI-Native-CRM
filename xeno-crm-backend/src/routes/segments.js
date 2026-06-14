@@ -71,12 +71,12 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const { name, rules } = req.body;
-    if (!name || !rules) return res.status(400).json({ error: 'name and rules required' });
-    buildWhereClause(rules); // validate before saving
+    const { name, rules, description } = req.body;
+    if (!name || !rules) return res.status(400).json({ error: 'name and rules are required' });
+    buildWhereClause(rules);
     const { rows } = await pool.query(
-      'INSERT INTO segments (name, rules, created_at) VALUES ($1, $2, now()) RETURNING *',
-      [name, rules]
+      'INSERT INTO segments (name, rules, description, created_at) VALUES ($1, $2, $3, now()) RETURNING *',
+      [name, rules, description || null]
     );
     res.status(201).json(rows[0]);
   } catch (err) {
