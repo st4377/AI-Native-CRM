@@ -51,7 +51,7 @@ router.post('/preview', async (req, res) => {
 
 router.get('/', async (req, res) => {
   try {
-    const { rows: segments } = await pool.query('SELECT * FROM segments ORDER BY id DESC');
+    const { rows: segments } = await pool.query('SELECT * FROM segments ORDER BY id ASC');
     const withCounts = await Promise.all(
       segments.map(async (seg) => {
         try {
