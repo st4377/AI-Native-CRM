@@ -16,7 +16,7 @@ The product takes a "classic interface, AI at the key decision points" approach:
 | **Repository** | https://github.com/st4377/AI-Native-CRM |
 | **Walkthrough Video** |  |
 
-> Public demo — no login required. Note: backend and channel service are on Render's free tier, so the **first request after inactivity can take ~30-50 seconds** (cold start).
+> Public demo — no login required. 
 
 This is a **monorepo** — both the "frontend codebase" and "backend codebase" links for the submission form point to the same repository, with the relevant subfolder:
 - Backend: https://github.com/st4377/AI-Native-CRM/tree/main/xeno-crm-backend
