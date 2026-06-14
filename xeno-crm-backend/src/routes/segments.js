@@ -1,6 +1,6 @@
 import express from 'express';
 import { pool } from '../db.js';
-import { generateJSON } from '../gemini.js';
+import { generateJSON } from '../llm.js';
 import { buildWhereClause, ALLOWED_FIELDS, ALLOWED_OPS } from '../lib/segmentQueryBuilder.js';
 
 const router = express.Router();
