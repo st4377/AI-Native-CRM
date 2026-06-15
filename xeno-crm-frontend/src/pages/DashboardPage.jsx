@@ -52,12 +52,12 @@ export default function DashboardPage() {
         <h3>Recent Campaigns</h3>
         <table className="data-table">
           <thead>
-            <tr><th>Message</th><th>Channel</th><th>Segment</th><th>Sent</th><th>Delivered</th><th>Opened</th><th>Clicked</th><th>Status</th></tr>
+            <tr><th>Campaign</th><th>Channel</th><th>Segment</th><th>Sent</th><th>Delivered</th><th>Opened</th><th>Clicked</th><th>Status</th></tr>
           </thead>
           <tbody>
             {campaigns.slice(0, 5).map((c) => (
               <tr key={c.id}>
-                <td>{(c.message || '').slice(0, 40)}{(c.message || '').length > 40 ? '...' : ''}</td>
+                <td>{c.name || c.segment_name}</td>
                 <td>{c.channel}</td>
                 <td>{c.segment_name}</td>
                 <td>{c.total_count}</td>

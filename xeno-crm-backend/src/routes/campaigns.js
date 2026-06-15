@@ -1,7 +1,7 @@
 import express from 'express';
 import axios from 'axios';
 import { pool } from '../db.js';
-import { generateJSON, generateText } from '../gemini.js';
+import { generateJSON, generateText } from '../llm.js';
 import { buildWhereClause } from '../lib/segmentQueryBuilder.js';
 
 const router = express.Router();
@@ -31,7 +31,7 @@ Return ONLY a JSON array of 3 strings.`;
 router.post('/', async (req, res) => {
   const client = await pool.connect();
   try {
-    const { segmentId, message, channel } = req.body;
+    const { segmentId, message, channel, name } = req.body;
     if (!segmentId || !message || !channel) return res.status(400).json({ error: 'segmentId, message, channel required' });
 
     const { rows: segRows } = await client.query('SELECT * FROM segments WHERE id = $1', [segmentId]);
@@ -43,9 +43,9 @@ router.post('/', async (req, res) => {
     await client.query('BEGIN');
 
     const { rows: campaignRows } = await client.query(
-      `INSERT INTO campaigns (segment_id, message, channel, status, audience_size, created_at)
-       VALUES ($1, $2, $3, 'sending', $4, now()) RETURNING *`,
-      [segmentId, message, channel, customers.length]
+      `INSERT INTO campaigns (segment_id, message, channel, status, audience_size, name, created_at)
+       VALUES ($1, $2, $3, 'sending', $4, $5, now()) RETURNING *`,
+      [segmentId, message, channel, customers.length, name || null]
     );
     const campaign = campaignRows[0];
 

@@ -5,6 +5,7 @@ export default function CampaignsPage() {
   const [segments, setSegments] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
 
+  const [campaignName, setCampaignName] = useState('');
   const [segmentId, setSegmentId] = useState('');
   const [channel, setChannel] = useState('email');
   const [goal, setGoal] = useState('');
@@ -15,7 +16,7 @@ export default function CampaignsPage() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState(null);
 
-  const [summaries, setSummaries] = useState({}); // campaignId -> summary text
+  const [summaries, setSummaries] = useState({});
   const [loadingSummary, setLoadingSummary] = useState(null);
 
   const loadSegments = () => apiGet('/api/segments').then(setSegments).catch((e) => setError(e.message));
@@ -41,7 +42,13 @@ export default function CampaignsPage() {
     setSending(true);
     setError(null);
     try {
-      await apiPost('/api/campaigns', { segmentId: Number(segmentId), message, channel });
+      await apiPost('/api/campaigns', {
+        segmentId: Number(segmentId),
+        message,
+        channel,
+        name: campaignName || null,
+      });
+      setCampaignName('');
       setGoal('');
       setVariants([]);
       setMessage('');
@@ -71,6 +78,15 @@ export default function CampaignsPage() {
 
       <div className="card">
         <h3>1. Choose a segment and goal</h3>
+        <div className="field">
+          <label>Campaign name (optional)</label>
+          <input
+            style={{ width: '100%' }}
+            value={campaignName}
+            onChange={(e) => setCampaignName(e.target.value)}
+            placeholder="e.g. Win-back June 2026"
+          />
+        </div>
         <div className="field">
           <label>Segment</label>
           <select value={segmentId} onChange={(e) => setSegmentId(e.target.value)}>
@@ -135,11 +151,12 @@ export default function CampaignsPage() {
               <div className="flex justify-between items-start mb-2">
                 <div>
                   <span className="text-lg mr-2">{icon}</span>
-                  <span className="font-semibold">{c.segment_name}</span>
+                  <span className="font-semibold">{c.name || c.segment_name}</span>
                   <span className="ml-2 text-xs px-2 py-1 rounded-full" style={{ background: '#dcfce7', color: '#166534' }}>{c.status}</span>
                 </div>
                 <span className="text-xs text-slate-400">{c.channel.toUpperCase()}</span>
               </div>
+              {c.name && <p style={{ color: '#94a3b8', fontSize: 12, marginBottom: 4 }}>Segment: {c.segment_name}</p>}
               <p style={{ color: '#64748b', fontSize: 14, marginBottom: 12 }}>{c.message}</p>
               <div className="grid grid-cols-4 gap-4 mb-3">
                 <div><p className="text-xl font-bold">{c.total_count}</p><p style={{ fontSize: 12, color: '#94a3b8' }}>Sent</p></div>
