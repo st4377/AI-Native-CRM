@@ -14,7 +14,7 @@ The product takes a "classic interface, AI at the key decision points" approach:
 | **CRM Backend API** | https://xeno-crm-backend-f14x.onrender.com |
 | **Channel Service** | https://xeno-channel-service-u27s.onrender.com |
 | **Repository** | https://github.com/st4377/AI-Native-CRM |
-| **Walkthrough Video** |  |
+| **Walkthrough Video** | https://drive.google.com/file/d/13Md__pTzOS1YJoKaIqGSM064tjK7y3KS/view?usp=sharing |
 
 > Public demo — no login required. 
 
@@ -219,4 +219,4 @@ The two-service, callback-driven architecture was chosen specifically so this sc
 
 ## AI-Native Development Workflow
 
-This project was built in close collaboration with Claude (Anthropic) as an AI pair-programmer — scaffolding the Express routes, designing the segment-rules-to-SQL safety layer, debugging deployment issues (including the Gemini → Groq provider swap above), and iterating on the frontend layout and responsiveness. See the walkthrough video for specific examples of what was generated, reviewed, and changed. 
+This project was built by — scaffolding the Express routes, designing the segment-rules-to-SQL safety layer, debugging deployment issues (including the Gemini → Groq provider swap above), and iterating on the frontend layout and responsiveness. See the walkthrough video for specific examples of what was generated, reviewed, and changed. 
