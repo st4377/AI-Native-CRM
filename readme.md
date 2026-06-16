@@ -11,7 +11,7 @@ The product takes a "classic interface, AI at the key decision points" approach:
 | | URL |
 |---|---|
 | **Frontend (app)** | https://xeno-ai-crm.netlify.app |
-| **CRM Backend API** | https://xeno-crm-backend-f14x.onrender.com |
+| **CRM Backend API** | https://xeno-crm-backend-f14x.onrender.com/health |
 | **Channel Service** | https://xeno-channel-service-u27s.onrender.com |
 | **Repository** | https://github.com/st4377/AI-Native-CRM |
 | **Walkthrough Video** | https://drive.google.com/file/d/13Md__pTzOS1YJoKaIqGSM064tjK7y3KS/view?usp=sharing |
